@@ -1,30 +1,6 @@
 require 'rexml/document'
 require 'yaml'
 
-module YAML
-	def YAML.dump( obj, io = nil )
-	  if obj.kind_of?(FeedTools::Feed) || obj.kind_of?(FeedTools::FeedItem)
-	    # Dangit, you WILL NOT serialize these things.
-	    obj.instance_variable_set("@xml_document", nil)
-	    obj.instance_variable_set("@root_node", nil)
-	    obj.instance_variable_set("@channel_node", nil)
-	  end
-    obj.to_yaml( io || io2 = StringIO.new )
-    io || ( io2.rewind; io2.read )
-	end
-	
-	def YAML.load( io )
-		yp = parser.load( io )
-	  if yp.kind_of?(FeedTools::Feed) || yp.kind_of?(FeedTools::FeedItem)
-	    # No really, I'm serious, you WILL NOT deserialize these things.
-	    yp.instance_variable_set("@xml_document", nil)
-	    yp.instance_variable_set("@root_node", nil)
-	    yp.instance_variable_set("@channel_node", nil)
-	  end
-	  yp
-	end
-end
-
 module REXML # :nodoc:
   class LiberalXPathParser < XPathParser # :nodoc:
     
